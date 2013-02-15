@@ -8,14 +8,14 @@ use Carp;
 use base 'Exporter';
 our @EXPORT_OK = qw(lift);
 
-sub value {
-    my ($this) = @_;
-    croak("Must override 'value' in " . ref($this));
-}
-
 sub lift {
     my ($class, $value) = @_;
     return bless \$value, $class;
+}
+
+sub value {
+    my ($this) = @_;
+    return $$this;
 }
 
 sub fmap {

@@ -24,9 +24,4 @@ sub fmap {
     }
 }
 
-sub value {
-    my ($this) = @_;
-    return $$this;
-}
-
 1;
