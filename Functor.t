@@ -11,10 +11,22 @@ use base 'Test::Class';
 sub fail_if_returned_early { 1 }
 
 sub test_maybe: Test(3) {
-    my $a = sub { A->new({ n => shift }) };
+    my $a = sub { A->new(shift) };
     is(maybe($a->(6))->step1->step2->value, 1,     "value returned in the end.");
     is(maybe($a->(4))->step1->step2->value, undef, "undef from the second step.");
     is(maybe($a->(3))->step1->step2->value, undef, "undef from the first step.");
+}
+
+sub test_list: Test(2) {
+    my $d = sub { D->new(shift) };
+    is_deeply(
+        [listf($d->(10))->step1->step2->value], [22, 18],
+        "list operations."
+    );
+    is_deeply(
+        [listf($d->(10))->step1->step1->step2->value], [24, 20, 20, 16],
+        "list returned twice."
+    );
 }
 
 __PACKAGE__->runtests(+1);
@@ -23,7 +35,7 @@ package ObjBase;
 
 sub new {
     my $class = shift;
-    bless shift, $class;
+    bless { n => shift }, $class;
 }
 
 package A;
@@ -32,7 +44,7 @@ use base 'ObjBase';
 sub step1 {
     my $n = shift->{n};
     if ($n % 2 == 0) {
-        return C->new({ n => $n / 2 });
+        return C->new($n / 2);
     } else {
         return;
     }
@@ -48,4 +60,20 @@ sub step2 {
     } else {
         return;
     }
+}
+
+package D;
+use base 'ObjBase';
+
+sub step1 {
+    my $n = shift->{n};
+    return (
+        D->new($n + 1),
+        D->new($n - 1),
+    );
+}
+
+sub step2 {
+    my $n = shift->{n};
+    return $n * 2;
 }
