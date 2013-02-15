@@ -3,7 +3,7 @@ package Data::Functor::Maybe;
 use strict;
 use warnings;
 
-use base qw(Data::Functor);
+use base qw(Data::Functor::Identity);
 
 our @EXPORT = qw(maybe);
 

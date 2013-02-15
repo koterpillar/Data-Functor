@@ -10,6 +10,10 @@ use Test::NoWarnings;
 use base 'Test::Class';
 sub fail_if_returned_early { 1 }
 
+sub test_identity: Test {
+    is(identity(Obj->new(10))->add(2)->n->value, 12, "identity works.");
+}
+
 sub test_lazy: Test {
     my $obj = Obj->new(0);
     my $n = lazy($obj)->add(2)->add(2)->n;

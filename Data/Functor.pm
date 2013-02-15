@@ -7,14 +7,9 @@ use Carp;
 
 use base 'Exporter';
 
-sub lift {
-    my ($class, $value) = @_;
-    return bless \$value, $class;
-}
-
 sub value {
     my ($this) = @_;
-    return $$this;
+    croak("Must override 'value' in " . ref($this));
 }
 
 sub fmap {
