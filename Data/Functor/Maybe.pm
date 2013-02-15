@@ -8,7 +8,25 @@ use base qw(Data::Functor);
 our @EXPORT = qw(maybe);
 
 sub maybe {
-    return shift;
+    return __PACKAGE__->lift(shift);
+}
+
+our $undef = maybe(undef);
+
+sub fmap {
+    my ($this, $method, @arguments) = @_;
+    my $object = $this->value;
+    if (!defined ($object)) {
+        return $undef;
+    } else {
+        my $result = $object->$method(@arguments);
+        return maybe($result);
+    }
+}
+
+sub value {
+    my ($this) = @_;
+    return $$this;
 }
 
 1;
