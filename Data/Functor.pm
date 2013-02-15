@@ -6,7 +6,6 @@ use warnings;
 use Carp;
 
 use base 'Exporter';
-our @EXPORT_OK = qw(lift);
 
 sub lift {
     my ($class, $value) = @_;
